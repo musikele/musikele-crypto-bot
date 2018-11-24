@@ -50,7 +50,7 @@ async function main() {
     totalEuroRemaining > MINIMUM_CEX_ACQUIRE &&
     totalEuroRemaining < 2 * MINIMUM_CEX_ACQUIRE
   ) {
-    nextOrderAmount = MINIMUM_CEX_ACQUIRE + totalEuroRemaining;
+    nextOrderAmount = totalEuroRemaining;
   }
   console.log(`si compra ancora. Next Buy: ${nextOrderAmount}`);
   const reducedBtcEurPrice = lastBtcEurPrice + 10;
