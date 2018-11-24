@@ -46,11 +46,6 @@ async function main() {
     );
     console.log(placeOrderResult);
     return;
-  } else if (
-    totalEuroRemaining > MINIMUM_CEX_ACQUIRE &&
-    totalEuroRemaining < 2 * MINIMUM_CEX_ACQUIRE
-  ) {
-    nextOrderAmount = totalEuroRemaining;
   }
   console.log(`si compra ancora. Next Buy: ${nextOrderAmount}`);
   const reducedBtcEurPrice = lastBtcEurPrice + 10;
