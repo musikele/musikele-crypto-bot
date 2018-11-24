@@ -3,9 +3,9 @@ require('dotenv').config();
 
 const cexPub = new CEXIO().promiseRest;
 
-const apiKey = process.env.CEX_API_KEY; 
-const apiSecret = process.env.CEX_API_SECRET; 
-const clientId = process.env.CEX_CLIENT_ID; 
+const apiKey = process.env.CEX_API_KEY;
+const apiSecret = process.env.CEX_API_SECRET;
+const clientId = process.env.CEX_CLIENT_ID;
 
 if (!apiKey || !apiSecret || !clientId)
   throw new Error('one of apiKey, apiSecret or clientId is not set');
@@ -46,7 +46,10 @@ async function main() {
     );
     console.log(placeOrderResult);
     return;
-  } else if (totalEuroRemaining - MINIMUM_CEX_ACQUIRE < MINIMUM_CEX_ACQUIRE) {
+  } else if (
+    totalEuroRemaining > MINIMUM_CEX_ACQUIRE &&
+    totalEuroRemaining < 2 * MINIMUM_CEX_ACQUIRE
+  ) {
     nextOrderAmount = MINIMUM_CEX_ACQUIRE + totalEuroRemaining;
   }
   console.log(`si compra ancora. Next Buy: ${nextOrderAmount}`);
