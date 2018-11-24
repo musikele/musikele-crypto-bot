@@ -37,6 +37,7 @@ async function main() {
     console.log('Tempo di vendere');
     //add 1% to price to sell
     const adjustedPriceToSell = lastBtcEurPrice + lastBtcEurPrice / 100;
+    console.log(`prezzo di vendita: ${adjustedPriceToSell}`);
     //SELL
     const placeOrderResult = await cexPub.place_order(
       'BTC/EUR',
