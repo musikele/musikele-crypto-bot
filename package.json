@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cexio-api-node": "^1.2.0"
+    "cexio-api-node": "^1.2.0",
+    "dotenv": "^6.1.0",
+    "eslint": "^5.9.0",
+    "pg": "^7.6.1"
   }
 }
