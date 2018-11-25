@@ -88,7 +88,7 @@ async function main() {
   );
 
   console.log(
-    `Ultimo mio evento su CEX: ${archivedOrdersResponse[0].lastTxTime}`
+    `Ultimi eventi CEX: ${archivedOrdersResponse.length} - Ultimo mio evento su CEX: ${archivedOrdersResponse[0].lastTxTime}`
   );
 
   if (archivedOrdersResponse.length > 0) {
