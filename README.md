@@ -1,10 +1,12 @@
 # CEX.io bot 
 
-> use at your own risk, I tell you this because I risked and lost some money. 
-> I started my journey in BTC trading with 160€, I almost doubled its value up to 390€ and then back to now, 99€ ... 
-> I don't think you should be putting real money or effort on this, BTC is just vapor for now... 
-> But this hasn't stopped me to develop my own bot that auto-trades bitcoin based on [Volume-weighted average price](https://en.wikipedia.org/wiki/Volume-weighted_average_price) technique.
-> 
+Use at your own risk, I tell you this because I risked and lost some money. 
+
+I started my journey in BTC trading with 160€, I almost doubled its value up to 390€ and then back to now, 99€ ... 
+
+I don't think you should be putting real money or effort on this, BTC is just vapor for now... 
+
+But this hasn't stopped me to develop my own bot that auto-trades bitcoin based on [Volume-weighted average price](https://en.wikipedia.org/wiki/Volume-weighted_average_price) technique. 
 
 So basically what's in here? A single massive bot that buys 20€ of bitcoins every day, and when you've converted all your euros in BTC, he sells everything. 
 
