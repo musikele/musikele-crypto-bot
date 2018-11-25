@@ -46,5 +46,5 @@ $ npm start
 ## To run on Heroku: 
 
 1. install addon Heroku Scheduler and set it to run every 24 hours 
-2. set your .env variables in heroku too (the .env file is in gitignore so it's not committed)
+2. set your .env variables in heroku too (the .env file is in .gitignore so it's not committed)
 
