@@ -15,21 +15,61 @@ const cexAuth = new CEXIO(clientId, apiKey, apiSecret).promiseRest;
 const MINIMUM_CEX_ACQUIRE = 20;
 
 async function main() {
-  const lastBtcEurPrice = await getLastBtcEurPrice();
-  console.log(`BTC/EURO: ${lastBtcEurPrice}`);
+  const currentBtcEurPrice = await getLastBtcEurPrice();
+  console.log(`BTC/EURO: ${currentBtcEurPrice}`);
 
   const { totalEuroRemaining, totalBTCRemaining } = await getAccountData();
   console.log(`Totale Euro: ${totalEuroRemaining}`);
   console.log(
     `Totale BTC: ${totalBTCRemaining} (che corrispondono a EUR ${totalBTCRemaining *
-      lastBtcEurPrice})`
+      currentBtcEurPrice})`
   );
 
   try {
     await checkThereAreNoPendingOrders();
-    console.log('non ci sono altri ordini in corso');
-  } catch (orders) {
-    throw new Error('TODO - still to fix this case');
+    //console.log('non ci sono altri ordini in corso');
+  } catch (e) {
+    console.log(e);
+    console.log('Ci sono altri ordini in corso:');
+    const {
+      time: lastOrderAskedAt,
+      id: lastOrderId,
+      price: lastOrderPrice,
+      amount: lastOrderAmount
+    } = e.orders[0];
+
+    const lastOrderDateAskedAt = new Date(Number(lastOrderAskedAt));
+    if (
+      new Date().getTime() <=
+      lastOrderDateAskedAt.getTime() + 1000 * 60 * 60 * 24
+    ) {
+      console.log(
+        `Order is ${(
+          (new Date().getTime() - lastOrderDateAskedAt) /
+          (1000 * 60 * 60)
+        ).toFixed(1)} hours old`
+      );
+
+      if (
+        currentBtcEurPrice <=
+        Number(lastOrderPrice) - Number(lastOrderPrice) * 0.01
+      ) {
+        console.log('Order is under 1% loss');
+        const cancelOrderResult = await cexPub.cancel_order(lastOrderId);
+        console.log(cancelOrderResult);
+
+        // il prezzo è troppo basso, vendi subito
+        const adjustedPriceToSell = (currentBtcEurPrice / 2).toFixed(1);
+        const placeOrderResult = await cexPub.place_order(
+          'BTC/EUR',
+          'sell',
+          lastOrderAmount,
+          adjustedPriceToSell
+        );
+        console.log(placeOrderResult);
+        return;
+      }
+    }
   }
 
   let nextOrderAmount = MINIMUM_CEX_ACQUIRE;
@@ -37,8 +77,8 @@ async function main() {
     console.log('Tempo di vendere');
     //add 1% to price to sell
     const adjustedPriceToSell = (
-      lastBtcEurPrice +
-      lastBtcEurPrice * 0.0125
+      currentBtcEurPrice +
+      currentBtcEurPrice * 0.008
     ).toFixed(1);
     console.log(`prezzo di vendita: ${adjustedPriceToSell}`);
     //SELL
@@ -52,7 +92,7 @@ async function main() {
     return;
   }
   console.log(`si compra ancora. Next Buy: ${nextOrderAmount}`);
-  const reducedBtcEurPrice = lastBtcEurPrice + 10;
+  const reducedBtcEurPrice = currentBtcEurPrice + 10;
   const btcNextOrderAmount = nextOrderAmount / reducedBtcEurPrice;
   console.log(`in BTC: ${btcNextOrderAmount}`);
 
@@ -72,12 +112,16 @@ main()
   .then(() => {
     console.log('Program finished.');
   })
-  .catch(e => console.error);
+  .catch(e => console.log);
 
 async function checkThereAreNoPendingOrders() {
   const openOrdersResult = await cexAuth.open_orders('BTC/EUR');
   console.log(`Ci sono ordini in corso? ${JSON.stringify(openOrdersResult)}`);
-  if (openOrdersResult.length > 0) throw new Error(openOrdersResult);
+  if (openOrdersResult.length > 0) {
+    const error = new Error('OrderAlreadyPresent');
+    error.orders = openOrdersResult;
+    throw error;
+  }
 }
 
 async function getAccountData() {
