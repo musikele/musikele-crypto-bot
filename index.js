@@ -72,6 +72,28 @@ async function main() {
     }
   }
 
+  //check if a transaction has appened less then 1d ago
+
+  const dateFrom = (
+    (new Date().getTime() - 1000 * 60 * 60 * 24) /
+    1000
+  ).toFixed(0);
+
+  const archivedOrdersResponse = await cexPub.archived_orders(
+    'BTC/EUR',
+    1, // limit
+    null, // dateTo
+    dateFrom, //dateFrom
+    null, //lastTxDateTo
+    null, //lastTxDateFrom
+    'c' //status
+  );
+
+  console.log(archivedOrdersResponse);
+
+  if (archivedOrdersResponse.length > 0) return;
+
+  //buy
   let nextOrderAmount = MINIMUM_CEX_ACQUIRE;
   if (totalEuroRemaining < MINIMUM_CEX_ACQUIRE) {
     console.log('Tempo di vendere');
