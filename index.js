@@ -36,7 +36,10 @@ async function main() {
   if (totalEuroRemaining < MINIMUM_CEX_ACQUIRE) {
     console.log('Tempo di vendere');
     //add 1% to price to sell
-    const adjustedPriceToSell = lastBtcEurPrice + lastBtcEurPrice * 0.15;
+    const adjustedPriceToSell = (
+      lastBtcEurPrice +
+      lastBtcEurPrice * 0.0125
+    ).toFixed(1);
     console.log(`prezzo di vendita: ${adjustedPriceToSell}`);
     //SELL
     const placeOrderResult = await cexPub.place_order(
