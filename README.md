@@ -1,8 +1,8 @@
 # CEX.io bot 
 
-Use at your own risk, I tell you this because I risked and lost some money. 
+**Use at your own risk**, Because you'll risk. I lost some money. 
 
-I started my journey in BTC trading with 160€, I almost doubled its value up to 390€ and then back to now, 99€ ... 
+I started my journey in BTC trading with 160€, I doubled its value up to 390€ and then back to now, 99€ ... 
 
 I don't think you should be putting real money or effort on this, BTC is just vapor for now... 
 
@@ -14,7 +14,13 @@ I do cover some edge cases I found during development.
 
 The bot is designed to work every 24 hours, open an issue if you want it to adapt...
 
-> this is not a showcase project... you'll find the ugliest code ever written by me... I just had to close my relationship with BTC by building a bot and not thinking anymore to them 
+> this is not a showcase project... you'll find the ugliest code ever written by me... comments in italian, variables in itanglish... I just had to close my relationship with BTC by building a bot and not thinking anymore to them 
+
+## Prerequisites
+
+This project requires an **account on [CEX.IO](https://cex.io) trading platform**. You also have to [generate secret and api keys](https://cex.io/trade/profile#/api).
+
+The probject only uses CEX.IO APIs avoiding external databases.
 
 ## install
 
