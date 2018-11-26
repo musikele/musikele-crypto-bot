@@ -74,28 +74,33 @@ async function main() {
 
   //check if a transaction has appened less then 1d ago
 
-  const dateTo = Number((new Date().getTime() / 1000).toFixed(0));
-  const dateFrom = Number(dateTo - 60 * 60 * 24);
+  const nowInUnixTime = Number((new Date().getTime() / 1000).toFixed(0));
+  const dateFrom = Number(nowInUnixTime - 60 * 60 * 24);
 
   const archivedOrdersResponse = await cexPub.archived_orders(
     'BTC/EUR',
-    null, //1, // limit
-    dateTo, // dateTo
+    1, //1, // limit
+    nowInUnixTime, // dateTo
     dateFrom, //dateFrom
-    dateTo, //lastTxDateTo
+    nowInUnixTime, //lastTxDateTo
     dateFrom, //lastTxDateFrom
     'd' //status
   );
 
   console.log(
-    `Ultimi eventi CEX: ${archivedOrdersResponse.length} - Ultimo mio evento su CEX: ${archivedOrdersResponse[0].lastTxTime}`
+    `Ultimi eventi CEX: ${
+      archivedOrdersResponse.length
+    } - Ultimo mio evento su CEX: ${archivedOrdersResponse[0].lastTxTime}`
   );
 
   if (archivedOrdersResponse.length > 0) {
-    console.log(
-      `L'ultimo evento è accaduto meno di 24 ore fa, chiudo e aspetto la prossima tornata`
-    );
-    return;
+    const { lastTxTime } = archivedOrdersResponse[0];
+    if (nowInUnixTime <= new Date(lastTxTime).getTime() / 1000 + 60 * 60 * 24) {
+      console.log(
+        `L'ultimo evento è accaduto meno di 24 ore fa, chiudo e aspetto la prossima tornata`
+      );
+      return;
+    }
   }
 
   //buy
