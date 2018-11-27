@@ -29,8 +29,9 @@ async function main() {
     await checkThereAreNoPendingOrders();
     //console.log('non ci sono altri ordini in corso');
   } catch (e) {
-    console.log(e);
-    console.log('Ci sono altri ordini in corso:');
+    console.log(
+      `Ci sono altri ordini in corso: ${JSON.stringify(e.orders[0])}`
+    );
     const {
       time: lastOrderAskedAt,
       id: lastOrderId,
@@ -50,6 +51,7 @@ async function main() {
         ).toFixed(1)} hours old`
       );
 
+      //controllo comunque che il prezzo non sia sceso troppo, se no vendi
       if (
         currentBtcEurPrice <=
         Number(lastOrderPrice) - Number(lastOrderPrice) * 0.01
@@ -123,6 +125,7 @@ async function main() {
     console.log(placeOrderResult);
     return;
   }
+
   console.log(`si compra ancora. Next Buy: ${nextOrderAmount}`);
   const reducedBtcEurPrice = currentBtcEurPrice + 10;
   const btcNextOrderAmount = nextOrderAmount / reducedBtcEurPrice;
