@@ -13,6 +13,7 @@ if (!apiKey || !apiSecret || !clientId)
 const cexAuth = new CEXIO(clientId, apiKey, apiSecret).promiseRest;
 
 const MINIMUM_CEX_ACQUIRE = 20;
+const MINIMUM_TIME_UNIT = 60 * 60;
 
 async function main() {
   const currentBtcEurPrice = await getLastBtcEurPrice();
@@ -42,7 +43,7 @@ async function main() {
     const lastOrderDateAskedAt = new Date(Number(lastOrderAskedAt));
     if (
       new Date().getTime() <=
-      lastOrderDateAskedAt.getTime() + 1000 * 60 * 60 * 24
+      lastOrderDateAskedAt.getTime() + 1000 * MINIMUM_TIME_UNIT
     ) {
       console.log(
         `Order is ${(
@@ -77,7 +78,7 @@ async function main() {
   //check if a transaction has appened less then 1d ago
 
   const nowInUnixTime = Number((new Date().getTime() / 1000).toFixed(0));
-  const dateFrom = Number(nowInUnixTime - 60 * 60 * 24);
+  const dateFrom = Number(nowInUnixTime - MINIMUM_TIME_UNIT);
 
   const archivedOrdersResponse = await cexPub.archived_orders(
     'BTC/EUR',
@@ -97,7 +98,10 @@ async function main() {
 
   if (archivedOrdersResponse.length > 0) {
     const { lastTxTime } = archivedOrdersResponse[0];
-    if (nowInUnixTime <= new Date(lastTxTime).getTime() / 1000 + 60 * 60 * 24) {
+    if (
+      nowInUnixTime <=
+      new Date(lastTxTime).getTime() / 1000 + MINIMUM_TIME_UNIT
+    ) {
       console.log(
         `L'ultimo evento è accaduto meno di 24 ore fa, chiudo e aspetto la prossima tornata`
       );
