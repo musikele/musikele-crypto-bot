@@ -93,7 +93,7 @@ async function main() {
   console.log(
     `Ultimi eventi CEX: ${
       archivedOrdersResponse.length
-    } - Ultimo mio evento su CEX: ${archivedOrdersResponse[0].lastTxTime}`
+    } - Ultimo evento su CEX: ${archivedOrdersResponse[0].lastTxTime}`
   );
 
   if (archivedOrdersResponse.length > 0) {
@@ -103,7 +103,8 @@ async function main() {
       new Date(lastTxTime).getTime() / 1000 + MINIMUM_TIME_UNIT
     ) {
       console.log(
-        `L'ultimo evento è accaduto meno di 24 ore fa, chiudo e aspetto la prossima tornata`
+        `L'ultimo evento è accaduto ${MINIMUM_TIME_UNIT /
+          3600} ore fa, chiudo e aspetto la prossima tornata`
       );
       return;
     }
