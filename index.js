@@ -28,11 +28,10 @@ async function main() {
 
   try {
     await checkThereAreNoPendingOrders();
-    //console.log('non ci sono altri ordini in corso');
+    console.log('non ci sono altri ordini in corso');
   } catch (e) {
-    console.log(
-      `Ci sono altri ordini in corso: ${JSON.stringify(e.orders[0])}`
-    );
+    const nowInUnixTime = Number((new Date().getTime() / 1000).toFixed(0));
+
     const {
       time: lastOrderAskedAt,
       id: lastOrderId,
@@ -41,14 +40,14 @@ async function main() {
     } = e.orders[0];
 
     const lastOrderDateAskedAt = new Date(Number(lastOrderAskedAt));
-    if (
-      new Date().getTime() <=
-      lastOrderDateAskedAt.getTime() + 1000 * MINIMUM_TIME_UNIT
-    ) {
+    const lastOrderDateAskedAtUnixTime = Number(
+      (lastOrderDateAskedAt / 1000).toFixed(0)
+    );
+    if (nowInUnixTime >= lastOrderDateAskedAtUnixTime + MINIMUM_TIME_UNIT) {
       console.log(
         `Order is ${(
-          (new Date().getTime() - lastOrderDateAskedAt) /
-          (1000 * 60 * 60)
+          (nowInUnixTime - lastOrderDateAskedAtUnixTime) /
+          MINIMUM_TIME_UNIT
         ).toFixed(1)} hours old`
       );
 
@@ -77,7 +76,6 @@ async function main() {
 
   //check if a transaction has appened less then 1d ago
 
-  const nowInUnixTime = Number((new Date().getTime() / 1000).toFixed(0));
   const dateFrom = Number(nowInUnixTime - MINIMUM_TIME_UNIT);
 
   const archivedOrdersResponse = await cexPub.archived_orders(
