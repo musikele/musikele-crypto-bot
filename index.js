@@ -43,34 +43,35 @@ async function main() {
     const lastOrderDateAskedAtUnixTime = Number(
       (lastOrderDateAskedAt / 1000).toFixed(0)
     );
-    if (nowInUnixTime >= lastOrderDateAskedAtUnixTime + MINIMUM_TIME_UNIT) {
-      console.log(
-        `Order is ${(
-          (nowInUnixTime - lastOrderDateAskedAtUnixTime) /
-          MINIMUM_TIME_UNIT
-        ).toFixed(1)} hours old`
+    if (nowInUnixTime <= lastOrderDateAskedAtUnixTime + MINIMUM_TIME_UNIT) {
+      return;
+    }
+    console.log(
+      `Order is ${(
+        (nowInUnixTime - lastOrderDateAskedAtUnixTime) /
+        MINIMUM_TIME_UNIT
+      ).toFixed(1)} hours old`
+    );
+
+    //controllo comunque che il prezzo non sia sceso troppo, se no vendi
+    if (
+      currentBtcEurPrice <=
+      Number(lastOrderPrice) - Number(lastOrderPrice) * 0.015
+    ) {
+      console.log('Order is under 1% loss');
+      const cancelOrderResult = await cexPub.cancel_order(lastOrderId);
+      console.log(cancelOrderResult);
+
+      // il prezzo è troppo basso, vendi subito
+      const adjustedPriceToSell = (currentBtcEurPrice / 2).toFixed(1);
+      const placeOrderResult = await cexPub.place_order(
+        'BTC/EUR',
+        'sell',
+        lastOrderAmount,
+        adjustedPriceToSell
       );
-
-      //controllo comunque che il prezzo non sia sceso troppo, se no vendi
-      if (
-        currentBtcEurPrice <=
-        Number(lastOrderPrice) - Number(lastOrderPrice) * 0.015
-      ) {
-        console.log('Order is under 1% loss');
-        const cancelOrderResult = await cexPub.cancel_order(lastOrderId);
-        console.log(cancelOrderResult);
-
-        // il prezzo è troppo basso, vendi subito
-        const adjustedPriceToSell = (currentBtcEurPrice / 2).toFixed(1);
-        const placeOrderResult = await cexPub.place_order(
-          'BTC/EUR',
-          'sell',
-          lastOrderAmount,
-          adjustedPriceToSell
-        );
-        console.log(placeOrderResult);
-        return;
-      }
+      console.log(placeOrderResult);
+      return;
     }
   }
 
@@ -89,9 +90,7 @@ async function main() {
   );
 
   console.log(
-    `Ultimi eventi CEX: ${
-      archivedOrdersResponse.length
-    } - Ultimo evento su CEX: ${archivedOrdersResponse[0].lastTxTime}`
+    `Ultimo evento completato: ${archivedOrdersResponse[0].lastTxTime}`
   );
 
   if (archivedOrdersResponse.length > 0) {
