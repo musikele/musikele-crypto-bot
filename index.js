@@ -32,8 +32,6 @@ async function main() {
     await checkThereAreNoPendingOrders();
     console.log('non ci sono altri ordini in corso');
   } catch (e) {
-    
-
     const {
       time: lastOrderAskedAt,
       id: lastOrderId,
