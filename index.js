@@ -54,7 +54,7 @@ async function main() {
       //controllo comunque che il prezzo non sia sceso troppo, se no vendi
       if (
         currentBtcEurPrice <=
-        Number(lastOrderPrice) - Number(lastOrderPrice) * 0.01
+        Number(lastOrderPrice) - Number(lastOrderPrice) * 0.015
       ) {
         console.log('Order is under 1% loss');
         const cancelOrderResult = await cexPub.cancel_order(lastOrderId);
@@ -130,7 +130,7 @@ async function main() {
   }
 
   console.log(`si compra ancora. Next Buy: ${nextOrderAmount}`);
-  const reducedBtcEurPrice = currentBtcEurPrice + 10;
+  const reducedBtcEurPrice = currentBtcEurPrice - currentBtcEurPrice * 0.005;
   const btcNextOrderAmount = nextOrderAmount / reducedBtcEurPrice;
   console.log(`in BTC: ${btcNextOrderAmount}`);
 
