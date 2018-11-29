@@ -7,6 +7,8 @@ const apiKey = process.env.CEX_API_KEY;
 const apiSecret = process.env.CEX_API_SECRET;
 const clientId = process.env.CEX_CLIENT_ID;
 
+const nowInUnixTime = Number((new Date().getTime() / 1000).toFixed(0));
+
 if (!apiKey || !apiSecret || !clientId)
   throw new Error('one of apiKey, apiSecret or clientId is not set');
 
@@ -30,7 +32,7 @@ async function main() {
     await checkThereAreNoPendingOrders();
     console.log('non ci sono altri ordini in corso');
   } catch (e) {
-    const nowInUnixTime = Number((new Date().getTime() / 1000).toFixed(0));
+    
 
     const {
       time: lastOrderAskedAt,
