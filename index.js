@@ -63,7 +63,10 @@ async function main() {
       console.log(cancelOrderResult);
 
       // il prezzo è troppo basso, vendi subito
-      const adjustedPriceToSell = (currentBtcEurPrice / 2).toFixed(1);
+      const adjustedPriceToSell = (
+        Number(lastOrderPrice) -
+        Number(lastOrderPrice) * 0.001
+      ).toFixed(1);
       const placeOrderResult = await cexPub.place_order(
         'BTC/EUR',
         'sell',
