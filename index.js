@@ -62,7 +62,7 @@ async function main() {
       const cancelOrderResult = await cexPub.cancel_order(lastOrderId);
       console.log(cancelOrderResult);
 
-      // il prezzo è troppo basso, vendi subito
+      // il prezzo è troppo alto, togli lo 0,1%
       const adjustedPriceToSell = (
         Number(lastOrderPrice) -
         Number(lastOrderPrice) * 0.001
@@ -117,7 +117,7 @@ async function main() {
     //add 1% to price to sell
     const adjustedPriceToSell = (
       currentBtcEurPrice +
-      currentBtcEurPrice * 0.08
+      currentBtcEurPrice * 0.02
     ).toFixed(1);
     console.log(`prezzo di vendita: ${adjustedPriceToSell}`);
     //SELL
