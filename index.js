@@ -15,7 +15,7 @@ if (!apiKey || !apiSecret || !clientId)
 const cexAuth = new CEXIO(clientId, apiKey, apiSecret).promiseRest;
 
 const MINIMUM_CEX_ACQUIRE = 20;
-const MINIMUM_TIME_UNIT = 58 * 60; // aspetto 58 minuti 
+const MINIMUM_TIME_UNIT = 58 * 60; // aspetto 58 minuti
 
 async function main() {
   const currentBtcEurPrice = await getLastBtcEurPrice();
@@ -117,7 +117,7 @@ async function main() {
     //add 1% to price to sell
     const adjustedPriceToSell = (
       currentBtcEurPrice +
-      currentBtcEurPrice * 0.02
+      currentBtcEurPrice * 0.01
     ).toFixed(1);
     console.log(`prezzo di vendita: ${adjustedPriceToSell}`);
     //SELL
