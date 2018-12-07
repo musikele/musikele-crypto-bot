@@ -15,7 +15,7 @@ if (!apiKey || !apiSecret || !clientId)
 const cexAuth = new CEXIO(clientId, apiKey, apiSecret).promiseRest;
 
 const MINIMUM_CEX_ACQUIRE = 20;
-const MINIMUM_TIME_UNIT = 60 * 60;
+const MINIMUM_TIME_UNIT = 58 * 60; // aspetto 58 minuti 
 
 async function main() {
   const currentBtcEurPrice = await getLastBtcEurPrice();
