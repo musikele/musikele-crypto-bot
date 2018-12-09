@@ -58,7 +58,7 @@ async function main() {
       currentBtcEurPrice <=
       Number(lastOrderPrice) - Number(lastOrderPrice) * 0.03
     ) {
-      console.log('Order is under 1% loss');
+      console.log('Order is under 1.5% loss');
       await sellWithNewPrice(
         lastOrderId,
         lastOrderPrice,
