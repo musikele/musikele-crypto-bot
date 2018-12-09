@@ -59,21 +59,21 @@ async function main() {
       Number(lastOrderPrice) - Number(lastOrderPrice) * 0.015
     ) {
       console.log('Order is under 1% loss');
-      const cancelOrderResult = await cexPub.cancel_order(lastOrderId);
-      console.log(cancelOrderResult);
-
-      // il prezzo è troppo alto, togli lo 0,1%
-      const adjustedPriceToSell = (
-        Number(lastOrderPrice) -
-        Number(lastOrderPrice) * 0.001
-      ).toFixed(1);
-      const placeOrderResult = await cexPub.place_order(
-        'BTC/EUR',
-        'sell',
+      await sellWithNewPrice(
+        lastOrderId,
+        lastOrderPrice,
         lastOrderAmount,
-        adjustedPriceToSell
+        0.02
       );
-      console.log(placeOrderResult);
+      return;
+    } else {
+      console.log('Order is not that low.');
+      await sellWithNewPrice(
+        lastOrderId,
+        lastOrderPrice,
+        lastOrderAmount,
+        0.001
+      );
       return;
     }
   }
@@ -151,6 +151,28 @@ async function main() {
   console.log(placeOrderResult);
 
   console.log(`Il prossimo ordine sarà di ${nextOrder}`);
+
+  async function sellWithNewPrice(
+    lastOrderId,
+    lastOrderPrice,
+    lastOrderAmount,
+    percentageCorrection
+  ) {
+    const cancelOrderResult = await cexPub.cancel_order(lastOrderId);
+    console.log(cancelOrderResult);
+    // il prezzo è troppo alto, togli lo 0,1%
+    const adjustedPriceToSell = (
+      Number(lastOrderPrice) -
+      Number(lastOrderPrice) * percentageCorrection
+    ).toFixed(1);
+    const placeOrderResult = await cexPub.place_order(
+      'BTC/EUR',
+      'sell',
+      lastOrderAmount,
+      adjustedPriceToSell
+    );
+    console.log(placeOrderResult);
+  }
 }
 
 main()
