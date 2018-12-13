@@ -56,14 +56,14 @@ async function main() {
     //controllo comunque che il prezzo non sia sceso troppo, se no vendi
     if (
       currentBtcEurPrice <=
-      Number(lastOrderPrice) - Number(lastOrderPrice) * 0.03
+      Number(lastOrderPrice) - Number(lastOrderPrice) * 0.035
     ) {
       console.log('Order is under 1.5% loss');
       await sellWithNewPrice(
         lastOrderId,
         lastOrderPrice,
         lastOrderAmount,
-        0.03
+        0.035
       );
       return;
     } else {
