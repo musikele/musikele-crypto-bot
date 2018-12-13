@@ -133,7 +133,7 @@ async function main() {
 
   console.log(`si compra ancora. Next Buy: ${nextOrderAmount}`);
   const reducedBtcEurPrice = (
-    currentBtcEurPrice -
+    currentBtcEurPrice +
     currentBtcEurPrice * 0.001
   ).toFixed(1);
   const btcNextOrderAmount = Number(
