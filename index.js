@@ -112,7 +112,6 @@ async function main() {
     }
   }
 
-  //buy
   let nextOrderAmount = MINIMUM_CEX_ACQUIRE;
   if (totalEuroRemaining < MINIMUM_CEX_ACQUIRE) {
     console.log('Tempo di vendere');
