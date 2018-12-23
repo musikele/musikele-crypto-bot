@@ -119,7 +119,7 @@ async function main() {
     //add 1% to price to sell
     const adjustedPriceToSell = (
       currentBtcEurPrice +
-      currentBtcEurPrice * 0.015
+      currentBtcEurPrice * 0.02
     ).toFixed(1);
     console.log(`prezzo di vendita: ${adjustedPriceToSell}`);
     //SELL
