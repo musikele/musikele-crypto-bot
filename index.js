@@ -15,7 +15,9 @@ if (!apiKey || !apiSecret || !clientId)
 const cexAuth = new CEXIO(clientId, apiKey, apiSecret).promiseRest;
 
 const MINIMUM_CEX_ACQUIRE = 20;
-const MINIMUM_TIME_UNIT = 58 * 60; // aspetto 58 minuti
+const ONE_HOUR = 58 * 60;
+const MINIMUM_TIME_UNIT = 3 * ONE_HOUR; // aspetto 3 ore
+const STOP_LOSS = 0.02 * 2;
 
 async function main() {
   const currentBtcEurPrice = await getLastBtcEurPrice();
@@ -43,27 +45,27 @@ async function main() {
     const lastOrderDateAskedAtUnixTime = Number(
       (lastOrderDateAskedAt / 1000).toFixed(0)
     );
-    if (nowInUnixTime <= lastOrderDateAskedAtUnixTime + MINIMUM_TIME_UNIT) {
+    if (nowInUnixTime <= lastOrderDateAskedAtUnixTime + ONE_HOUR) {
       return;
     }
     console.log(
       `Order is ${(
         (nowInUnixTime - lastOrderDateAskedAtUnixTime) /
-        MINIMUM_TIME_UNIT
+        ONE_HOUR
       ).toFixed(1)} hours old`
     );
 
     //controllo comunque che il prezzo non sia sceso troppo, se no vendi
     if (
       currentBtcEurPrice <=
-      Number(lastOrderPrice) - Number(lastOrderPrice) * 0.035
+      Number(lastOrderPrice) - Number(lastOrderPrice) * STOP_LOSS
     ) {
-      console.log('Order is under 1.5% loss');
+      console.log('Order is under 2% loss');
       await sellWithNewPrice(
         lastOrderId,
         lastOrderPrice,
         lastOrderAmount,
-        0.035
+        STOP_LOSS
       );
       return;
     } else {
@@ -78,7 +80,7 @@ async function main() {
     }
   }
 
-  //check if a transaction has appened less then 1d ago
+  //check if a transaction has appened less then 3h ago
 
   const dateFrom = Number(nowInUnixTime - MINIMUM_TIME_UNIT);
 
@@ -103,7 +105,7 @@ async function main() {
       new Date(lastTxTime).getTime() / 1000 + MINIMUM_TIME_UNIT
     ) {
       console.log(
-        `L'ultimo evento è accaduto ${MINIMUM_TIME_UNIT /
+        `L'ultimo evento è accaduto ${ONE_HOUR /
           3600} ore fa, chiudo e aspetto la prossima tornata`
       );
       return;
