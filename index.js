@@ -16,7 +16,7 @@ const cexAuth = new CEXIO(clientId, apiKey, apiSecret).promiseRest;
 
 const MINIMUM_CEX_ACQUIRE = 20;
 const ONE_HOUR = 58 * 60;
-const MINIMUM_TIME_UNIT = 3 * ONE_HOUR; // aspetto 3 ore
+const MINIMUM_TIME_UNIT = 18 * ONE_HOUR; // aspetto 18 ore
 const STOP_LOSS = 0.02 * 2;
 
 async function main() {
