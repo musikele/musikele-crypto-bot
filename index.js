@@ -14,7 +14,8 @@ if (!apiKey || !apiSecret || !clientId)
 
 const cexAuth = new CEXIO(clientId, apiKey, apiSecret).promiseRest;
 
-const MINIMUM_CEX_ACQUIRE = 20;
+//const MINIMUM_CEX_ACQUIRE = 20;
+const MINIMUM_CEX_ACQUIRE_IN_BTC = 0.00201;
 const ONE_HOUR = 58 * 60;
 const MINIMUM_TIME_UNIT = 18 * ONE_HOUR; // aspetto 18 ore
 const STOP_LOSS = 0.02 * 2;
@@ -22,7 +23,8 @@ const STOP_LOSS = 0.02 * 2;
 async function main() {
   const currentBtcEurPrice = await getLastBtcEurPrice();
   console.log(`BTC/EURO: ${currentBtcEurPrice}`);
-
+  const MINIMUM_CEX_ACQUIRE = Math.max(currentBtcEurPrice * MINIMUM_CEX_ACQUIRE_IN_BTC , 20);
+  console.log('Prossimo acquisto: ', MINIMUM_CEX_ACQUIRE);
   const { totalEuroRemaining, totalBTCRemaining } = await getAccountData();
   console.log(`Totale Euro: ${totalEuroRemaining}`);
   console.log(
